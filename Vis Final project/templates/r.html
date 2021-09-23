@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="msapplication-tap-highlight" content="no">
+<meta name="description" content="">
+<title>Global Terrorism Dashboard</title>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
+<link href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3-scale-radial.js"></script>
+
+<link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='jqvmap.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='admin-materialize.min.css') }}">
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+<script src="https://bl.ocks.org/syntagmatic/raw/3341641/render-queue.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-sankey/0.7.1/d3-sankey.min.js"></script>
+
+
+<script src = "{{ url_for('static', filename='d3-tip.js')}}"></script>
+<link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='style.css') }}">
+
+</head>
+<body>
+
+    <div class="vector-holder">
+        <div class="vector vector0"></div>
+    </div>
+
+    <div style="margin: 0px 20px;">
+        <div class="navbar">
+          <a href="#" class="brand-logo" style="padding: 0 15px;"><h5>Global Terrorism Dahsboard</h5></a>
+          <ul id="nav-mobile" class="right hide-on-med-and-down">
+            <li><a id="targets">Targets</a></li>
+            <!-- <li><a href="sass.html">Sass</a></li>
+            <li><a href="badges.html">Components</a></li>
+            <li><a href="collapsible.html">JavaScript</a></li> -->
+          </ul>
+        </div>
+    </div>
+
+
+    <div class="row" id="row3" style="display:none;">
+        <div class="col l6 s6" >
+            <div class="card-panel" >
+                <h6>Number of People Killed by Terrorism Organizations</h6>
+                <hr id="bubble" style="color:transparent">
+                <h5 style="display: none">No data to display for these combination of filters</h5>
+                <div id="radial"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row container-fluid" id="row1">
+        <div class="col l4 m6 s12" >
+            <div class="card-panel" >
+                <h6>Number of People Killed by Terrorism Organizations</h6>
+                <p></p>
+                <div id="waynebubble"></div>
+            </div>
+        </div>
+        <div class="col l4 m6 s12">
+            <div class="card-panel" >
+                <h6>Top 10 Worst Affected Cities</h6>
+                <p></p>
+                <h5 id="pie" style="display: none">No data to display for these combination of filters</h5>
+                <div id="piechart"></div>
+                <!-- <div id="piechartlegend"></div> -->
+            </div>
+        </div>
+        <div id="mapmain" class="col l4 m6 s12" >
+            <div class="card-panel" >
+                <h6>Distribution of Attacks</h6>
+                <p></p>
+                <div id="mapdiv"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row container-fluid" id="row2">
+        <div class="col l4 m6 s12">
+        <div class="card-panel nwo0" >
+            <h6>Type of Attacks</h6>
+            <p></p>
+            <h5  id="bar" style="display: none">No data to display for these combination of filters</h5>
+            <div id="barchart"></div>
+        </div>
+        </div>
+        <div class="col l4 m6 s12">
+            <div class="card-panel nwo1" >
+                <h6>Time Series of Attacks</h6>
+                <p></p>
+                <div id="linebrush"></div>
+            </div>
+    </div>
+        
+        </div>
+        <div class="row">
+
+            <div class="col l6 s6" style="display: none">
+                <div class="card-panel" >
+                    <h6>Number of People Killed by Terrorism Organizations</h6>
+                    <p></p>
+                    <div id="para" style="height:501px;"></div>
+                </div>
+            </div>
+        </div>
+
+    <div id="rightSlide" class="rightSlide">
+        <div class="cancel-btn">
+            <svg id="delete" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 172 172" style="border: none; margin: 10px; fill:#000000;"><g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path d="M0,172v-172h172v172z" fill="none"></path><g fill="#ffffff"><path d="M35.76335,28.59668c-2.91628,0.00077 -5.54133,1.76841 -6.63871,4.47035c-1.09737,2.70194 -0.44825,5.79937 1.64164,7.83336l45.09961,45.09961l-45.09961,45.09961c-1.8722,1.79752 -2.62637,4.46674 -1.97164,6.97823c0.65473,2.51149 2.61604,4.4728 5.12753,5.12753c2.51149,0.65473 5.18071,-0.09944 6.97823,-1.97165l45.09961,-45.09961l45.09961,45.09961c1.79752,1.87223 4.46675,2.62641 6.97825,1.97168c2.5115,-0.65472 4.47282,-2.61605 5.12755,-5.12755c0.65472,-2.5115 -0.09946,-5.18073 -1.97168,-6.97825l-45.09961,-45.09961l45.09961,-45.09961c2.11962,-2.06035 2.75694,-5.21064 1.60486,-7.93287c-1.15207,-2.72224 -3.85719,-4.45797 -6.81189,-4.37084c-1.86189,0.05548 -3.62905,0.83363 -4.92708,2.1696l-45.09961,45.09961l-45.09961,-45.09961c-1.34928,-1.38698 -3.20203,-2.16948 -5.13704,-2.1696z"></path></g></g></svg>
+        </div>
+        <div class="col l4 m6 s12">
+            <div class="card-panel card-panel-slide" >
+                <h6 style="margin: 0;">Targets of Terrorist Organizations</h6>
+                <p></p>
+                <div id="sankey"></div>
+            </div>
+        </div>
+    </div>
+
+  <script src = "{{ url_for('static', filename='app.js')}}"></script>
+  <script src = "{{ url_for('static', filename='map.js')}}"></script>
+  <script src = "{{ url_for('static', filename='para.js')}}"></script>
+  <script src = "{{ url_for('static', filename='pie.js')}}"></script> 
+
+  <script src = "{{ url_for('static', filename='barchart.js')}}"></script>
+<script src = "{{ url_for('static', filename='linebrush.js')}}"></script>
+<script src = "{{ url_for('static', filename='sankey.js')}}"></script>
+<style src = "{{ url_for('static', filename='style.css')}}"></style>
+
+  <script src = "{{ url_for('static', filename='materialize.min.js')}}"></script>
+  <script src = "{{ url_for('static', filename='sankey_dependecy.js')}}"></script>
+  <script src = "{{ url_for('static', filename='bubble.js')}}"></script>
+
+  <script src = "{{ url_for('static', filename='imagesloaded.pkgd.min.js')}}"></script>
+  <script src="https://unpkg.com/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"></script>
+
+
+</body>
+</html>

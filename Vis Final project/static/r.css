@@ -1,0 +1,459 @@
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: #141414;
+  color: black;
+  overflow-x: hidden;
+}
+
+.button{
+  background-color: white;
+  border:2px;
+  padding:7px;
+  margin-bottom: 11px;
+}
+
+.area {
+  fill: steelblue;
+  clip-path: url(#clip);
+}
+
+.parcoords {
+    display: block;
+  }
+  
+  .parcoords svg,
+  .parcoords canvas {
+    font: 10px sans-serif;
+    position: absolute;
+  }
+  
+  .parcoords canvas {
+    opacity: 0.9;
+    pointer-events: none;
+  }
+  
+  .axis .title {
+    font-size: 10px;
+    transform: rotate(-21deg) translate(-5px,-6px);
+    fill: rgb(185, 185, 185);
+  }
+  
+  .axis line,
+  .axis path {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1px;
+  }
+  
+  .axis .tick text {
+    fill: rgb(207, 206, 206);
+    pointer-events: none;
+  }
+  
+  .axis.pl_facility .tick text,
+  .axis.pl_instrument .tick text,
+  .axis.st_spstr .tick text {
+    font-size: 6px; 
+  }
+  
+  .axis.pl_telescope .tick text {
+    font-size: 5px; 
+  }
+  
+  .axis:hover line,
+  .axis:hover path,
+  .axis.active line,
+  .axis.active path {
+    fill: none;
+    stroke: #222;
+    stroke-width: 1px;
+  }
+  
+  .axis:hover .title {
+    font-weight: bold;
+  }
+  
+  .axis:hover .tick text {
+    opacity: 1;
+  }
+  
+  .axis.active .title {
+    font-weight: bold;
+  }
+  
+  .axis.active .tick text {
+    opacity: 1;
+    font-weight: bold;
+  }
+  
+  .brush .extent {
+    fill-opacity: .3;
+    stroke: #fff;
+    stroke-width: 1px;
+  }
+  
+  pre {
+    width: 100%;
+    height: 300px;
+    margin: 6px 12px;
+    tab-size: 40;
+    font-size: 10px;
+    overflow: auto;
+  }
+
+  .d3-tip {
+    line-height: 1.5;
+    font-weight: 400;
+    font-family:"avenir next", Arial, sans-serif;
+    padding: 6px;
+    background: rgba(0, 0, 0, 0.6);
+    color: #69ff93;
+    border-radius: 1px;
+    pointer-events: none;
+    }
+
+    /* Creates a small triangle extender for the tooltip */
+    .d3-tip:after {      
+      box-sizing: border-box;
+      display: inline;
+      font-size: 8px;
+      width: 100%;
+      line-height: 1.5;
+      color: rgba(0, 0, 0, 0.6);
+      position: absolute;
+      pointer-events: none;
+      
+    }
+
+    /* Northward tooltips */
+    .d3-tip.n:after {
+      content: "\25BC";
+      margin: -1px 0 0 0;
+      top: 100%;
+      left: 0;
+      text-align: center;
+    }
+
+    /* Eastward tooltips */
+    .d3-tip.e:after {
+      content: "\25C0";
+      margin: -4px 0 0 0;
+      top: 50%;
+      left: -8px;
+    }
+
+    /* Southward tooltips */
+    .d3-tip.s:after {
+      content: "\25B2";
+      margin: 0 0 1px 0;
+      top: -8px;
+      left: 0;
+      text-align: center;
+    }
+
+    /* Westward tooltips */
+    .d3-tip.w:after {
+      content: "\25B6";
+      margin: -4px 0 0 -1px;
+      top: 50%;
+      left: 100%;
+    }
+
+   text{
+      fill:#ccc;
+    }
+
+    .details{
+      color:white;
+    }
+
+    .background {
+        fill: none;
+        pointer-events: all; 
+      }
+      
+      .feature {
+        fill: #ccc;
+        cursor: pointer;
+      }
+      
+      .feature.active {
+        fill: orange;
+      }
+      
+      .mesh {
+        fill: none;
+        stroke: #fff;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+
+      .pie {
+        margin: 0px;
+      }
+      
+      svg {
+          float: left;
+      }
+      
+      .legend {
+        float: left;
+        font-family: "Verdana";
+        font-size: .7em;
+      }
+      
+      .pie text {
+        font-family: "Verdana";
+        fill: #000;
+      }
+      
+      .pie .name-text{
+        font-size: .8em;
+      }
+      
+      .pie .value-text{
+        font-size: 3em;
+      }
+      
+      #piechartlegend{
+          width: 400px;
+          height: 300px;
+      }
+      
+      html, body {
+        height: 100%;
+      }
+      
+      path {
+        stroke: #fff;
+      }
+      
+      .total {
+        pointer-events: none;
+      }
+      
+      /* legend */
+      
+      #legend {
+        line-height: 1.4em;
+      }
+      .legend {
+        font-size: 14px;
+        float: left;
+        margin-right:1em;
+      }
+      div#legend .rect {
+        width: 10px;
+        height: 10px;
+        margin-right: 4px;
+        display: inline-block;
+      }
+      .clearfix::after { 
+         content: " ";
+         display: block; 
+         height: 0; 
+         clear: both;
+      }
+      rect {
+        stroke-width: 2;
+      }
+
+div.tooltip {
+  position: absolute;
+  text-align: left;
+  width: auto;
+  padding: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  background: rgb(103, 148, 220);
+  border-radius: 5px;
+  pointer-events: none;
+  opacity: 0.9;
+  border: 1px solid rgb(255, 255, 255);
+  color: #fff;
+}
+
+.tooltips {                                                        /* NEW */
+  background: #eee;                                               /* NEW */
+  box-shadow: 0 0 5px #999999;                                    /* NEW */
+  color: #333;                                                    /* NEW */
+  display: none;                                                  /* NEW */
+  font-size: 12px;                                                /* NEW */
+  left: 130px;                                                    /* NEW */
+  padding: 11px;                                                  /* NEW */
+  position: absolute;                                             /* NEW */
+  /*text-align: center;                                             !* NEW *!*/
+  top: 95px;                                                      /* NEW */
+  /*width: 180px;                                                    !* NEW *!*/
+  z-index: 10;                                                    /* NEW */
+}
+      
+      .legend {
+   width: 50%;
+        margin: 0 auto;
+      }
+      
+      .chart-1 {
+        width: 33%;
+      }
+
+.node rect {
+  fill-opacity: .9;
+  shape-rendering: crispEdges;
+}
+
+.node text {
+  pointer-events: none;
+  text-shadow: 0 1px 0 #fff;
+}
+
+.link {
+  fill: none;
+  stroke: steelblue;
+}
+
+
+/*Styles*/
+
+@media only screen and (min-width: 1200px){
+  .container-fluid{
+    width: 100%;
+    display: flex;
+  }
+  /*#sankey{
+    width: 900px !important;
+  }*/
+}
+
+.card-panel {
+  display: flex;
+  max-width: calc(100vw - 15px);
+  overflow: auto;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-panel h6{
+  color: white;
+  font-weight: 300;
+}
+
+#sankey{
+  width: 1000px;
+  color: white;
+  transform: translateX(20vw);
+}
+
+nav {
+  height: 10vh;
+  background-color: darkgray;
+  display: flex;
+  align-items: center;
+}
+
+.card-panel {
+  background-color: rgba(31, 31, 31, 0.5);
+  backdrop-filter: blur(300px);
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgb(0 0 0 / 25%);
+  border-left: 2px solid #1F77B4;
+  overflow: hidden;
+}
+
+.brand-logo {
+  display: inline-block;
+  /* width: 50%; */
+  /* background-color: palevioletred; */
+}
+
+.brand-logo h5 {
+  font-weight: 500;
+}
+
+.row {
+  width: 95%;
+  height: 44vh;
+}
+
+#nav-mobile {
+  display: flex;
+  flex-direction: row;
+}
+
+#nav-mobile li {
+  margin: 0PX 10px;
+}
+
+.vector-holder {
+  display: inline-block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: gray;
+  z-index: 999;
+}
+
+.rightSlide {
+  position: fixed;
+  top: 0;
+  /* left: 60vw; */
+  left: 100vw;
+  height: 96vh;
+  width: 36vw;
+  background-color: rgb(31, 31, 31);
+  margin: 2vh 0.5vw;
+  border-radius: 20px;
+  -webkit-backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px);
+  border: 1px solid #1F77B4;
+  transition: 500ms ease;
+  /* display: none; */
+}
+
+.nwo0 {
+  width: 35vw;
+  transform: translateX(-50%);
+}
+
+.nwo1 {
+  width: 55vw;
+  transform: translateX(-50%);
+}
+
+#row2 {
+  margin-left: 5%;
+}
+
+text {
+  stroke: none;
+}
+
+.card-panel-slide {
+  background-color: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border: none;
+}
+
+.cancel-btn {
+  display: inline-block;
+  height: 10px;
+  width: 100%;
+  /* background-color: salmon; */
+}
+
+li {
+  cursor: pointer;
+  transition: 250ms ease;
+}
+
+li:hover {
+  text-shadow: 0px 0px 10px white;
+  transform: scale(1.1);
+}

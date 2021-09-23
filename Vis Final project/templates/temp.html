@@ -1,0 +1,210 @@
+       <!DOCTYPE html>
+       <head>
+       <meta charset="utf-8">
+       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1">
+       <meta http-equiv="X-UA-Compatible" content="IE=edge">
+       <meta name="msapplication-tap-highlight" content="no">
+       <meta name="description" content="">
+       <title>Global Terrorism Dashboard</title>
+       <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
+       <link href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css" rel="stylesheet">
+       <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3-scale-radial.js"></script>
+
+       <link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='jqvmap.css') }}">
+       <link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='admin-materialize.min.css') }}">
+
+
+       <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+       <script src="https://d3js.org/d3.v4.min.js"></script>
+       <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+       <script src="https://d3js.org/d3-geo-projection.v2.min.js"></script>
+       <script src="https://bl.ocks.org/syntagmatic/raw/3341641/render-queue.js"></script>
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-sankey/0.7.1/d3-sankey.min.js"></script>
+
+
+       <script src = "{{ url_for('static', filename='d3-tip.js')}}"></script>
+       <link rel="stylesheet" type="text/css" href="{{ url_for ('static', filename='style.css') }}">
+       </head>
+       <body>
+
+         <main>
+
+           <div class="container" style="width: 100% !important; margin-top:0px !important;">
+
+             <div class="row">
+               <div class="card-panel container-fluid" style="background: steelblue; height: 31px; position: relative">
+                 <h5 style="color: white;margin: 0; position: absolute; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);">Global Terrorism Dahsboard</h5>
+                   <button type="button" class="btn btn-light">Light</button>
+               </div>
+             </div>
+               <div class="row">
+       <!--            <div class="col l4 s4">-->
+       <!--                <div class="card-panel" style="background-color: white; height: 278px;">-->
+       <!--                    <h6 style="color:#ccc">Statistics</h6>-->
+       <!--                    <hr style="color:#ccc">-->
+       <!--                    <div class="row">-->
+       <!--                        <div class="col l4 s4">-->
+       <!--                            <span><b>Country: </b><span id="country">All</span></span>-->
+       <!--                        </div>-->
+       <!--                        <div class="col l4 s4">-->
+       <!--                            <span><b>City Selected: </b><span id="city">None</span></span>-->
+       <!--                        </div>-->
+       <!--                        <div class="col l4 s4">-->
+       <!--                            <span><b>Year Range: </b><span id="year">2015-2018</span></span>-->
+       <!--                        </div>-->
+       <!--                    </div>-->
+       <!--                    <div class="row">-->
+       <!--                        <div class="col l4 s4">-->
+       <!--                            <span><b>Injured: </b><span id="injured">0</span></span>-->
+       <!--                        </div>-->
+       <!--                        <div class="col l4 s4">-->
+       <!--                            <span><b>Killed: </b><span id="killed">0</span></span>-->
+       <!--                        </div>-->
+       <!--                        <div class="col l4 s4">-->
+       <!--                            <span><b>Total Attacks: </b><span id="attacks">0</span></span>-->
+       <!--                        </div>-->
+       <!--                    </div>-->
+       <!--                </div>-->
+       <!--            </div>-->
+                   <div class="col l4 s4">
+                       <div class="card-panel" style="background-color: white; height: 278px;">
+                           <h6 style="color:#ccc">Top 10 Worst Affected Cities</h6>
+                           <hr style="color:#ccc">
+                           <div id="piechart"></div>
+                           <div id="piechartlegend"></div>
+                       </div>
+                   </div>
+                   <div id="mapmain" class="col l8 s8">
+                       <div class="card-panel" style="background-color: white; height: 278px;">
+                           <h6 style="color:#ccc">Distribution of Attacks</h6>
+                           <hr style="color:#ccc">
+                           <div id="mapdiv" style="margin-left: -13px;"></div>
+                       </div>
+                   </div>
+               </div>
+               <div class="row">
+                   <div class="col l4 s4">
+                   <div class="card-panel" style="background-color: white; height: 348px;">
+                       <h6 style="color:#ccc">Type of Attacks</h6>
+                       <hr style="color:#ccc">
+                       <div id="barchart"></div>
+                   </div>
+                   </div>
+                   <div class="col l4 s4">
+                       <div class="card-panel" style="background-color: white; height: 348px;">
+                           <h6 style="color:#ccc">Time Series of Attacks</h6>
+                           <hr style="color:#ccc">
+                           <div id="linebrush" style="width:960px;height:300px;"></div>
+                       </div>
+               </div>
+                   <div class="col l4 s4">
+                       <div class="card-panel" style="background-color: white;height: 348px;">
+                           <h6 style="color:#ccc">Targets of Terrorist Organizations</h6>
+                           <hr style="color:#ccc">
+                           <div id="sankey" style="width:960px;"></div>
+                       </div>
+                   </div>
+       <!--      <div class="row">-->
+       <!--        <div class="col l5 s5">-->
+       <!--&lt;!&ndash;        <div class="row">&ndash;&gt;-->
+       <!--&lt;!&ndash;          <div class="card-panel" style="background-color: white;">&ndash;&gt;-->
+       <!--&lt;!&ndash;            <h6 style="color:#ccc">Top 10 Worst Affected Cities</h6>&ndash;&gt;-->
+       <!--&lt;!&ndash;            <hr style="color:#ccc">&ndash;&gt;-->
+       <!--&lt;!&ndash;            <div id="piechart"></div>&ndash;&gt;-->
+       <!--&lt;!&ndash;            <div id="piechartlegend"></div>&ndash;&gt;-->
+       <!--&lt;!&ndash;          </div>&ndash;&gt;-->
+       <!--&lt;!&ndash;        </div>&ndash;&gt;-->
+       <!--        <div class="row">-->
+       <!--            <div class="card-panel" style="background-color: white; height: 348px;">-->
+       <!--                <h6 style="color:#ccc">Type of Attacks</h6>-->
+       <!--                <hr style="color:#ccc">-->
+       <!--              <div id="barchart"></div>-->
+       <!--            </div>-->
+       <!--        </div>-->
+       <!--        </div>-->
+       <!--&lt;!&ndash;        <div class="col l7 s7">&ndash;&gt;-->
+       <!--&lt;!&ndash;          <div class="card-panel" style="background-color: white; height: 778px;">&ndash;&gt;-->
+       <!--&lt;!&ndash;            <h6 style="color:#ccc">Distribution of Attacks</h6>&ndash;&gt;-->
+       <!--&lt;!&ndash;            <hr style="color:#ccc">&ndash;&gt;-->
+       <!--&lt;!&ndash;            <div id="mapdiv" style="margin-left: -13px;"></div>&ndash;&gt;-->
+       <!--&lt;!&ndash;            </div>&ndash;&gt;-->
+       <!--&lt;!&ndash;          </div>&ndash;&gt;-->
+
+
+       <!--          </div>-->
+       <!--      </div>-->
+       <!--      <div class="row">-->
+       <!--          <div class="col l6 s6">-->
+       <!--          <div class="card-panel" style="background-color: white;">-->
+       <!--              <h6 style="color:#ccc">Time Series of Attacks</h6>-->
+       <!--              <hr style="color:#ccc">-->
+       <!--              <div id="linebrush" style="width:960px;height:300px;"></div>-->
+       <!--          </div>-->
+       <!--          </div>-->
+       <!--          <div class="col l6 s6">-->
+       <!--              <div class="card-panel" style="background-color: white;">-->
+       <!--                  <h6 style="color:#ccc">Targets of Terrorist Organizations</h6>-->
+       <!--                  <hr style="color:#ccc">-->
+       <!--                  <div id="sankey" style="width:960px;height:300px;"></div>-->
+       <!--              </div>-->
+       <!--          </div>-->
+       <!--      </div>-->
+       <!--      <div class="row">-->
+       <!--          <div class="col l6 s6">-->
+       <!--              <div class="card-panel" style="background-color: white;">-->
+       <!--                  <h6 style="color:#ccc">Number of People Killed by Terrorism Organizations</h6>-->
+       <!--                  <hr style="color:#ccc">-->
+       <!--                  <div id="radial" style="height:501px;"></div>-->
+       <!--              </div>-->
+       <!--          </div>-->
+       <!--          <div class="col l6 s6">-->
+       <!--              <div class="card-panel" style="background-color: white;">-->
+       <!--                  <h6 style="color:#ccc">Parallel Coordinates of Data</h6>-->
+       <!--                  <hr style="color:#ccc">-->
+       <!--                  <div id="para" style="height:501px;"></div>-->
+       <!--              </div>-->
+                 </div>
+                   <div class="row">
+                       <div class="col l6 s6" style="display:none;">
+                           <div class="card-panel" style="background-color: white;">
+                                                 <h6 style="color:#ccc">Number of People Killed by Terrorism Organizations</h6>
+                                                 <hr style="color:#ccc">
+                                                 <div id="radial" style="height:501px;"></div>
+                                             </div>
+                       </div>
+                       <div class="col l6 s6" style="display: none">
+                           <div class="card-panel" style="background-color: white;">
+                               <h6 style="color:#ccc">Number of People Killed by Terrorism Organizations</h6>
+                               <hr style="color:#ccc">
+                               <div id="para" style="height:501px;"></div>
+                           </div>
+                       </div>
+                   </div>
+             </div>
+         </main>
+
+         <script src = "{{ url_for('static', filename='map.js')}}"></script>
+         <script src = "{{ url_for('static', filename='para.js')}}"></script>
+         <script src = "{{ url_for('static', filename='pie.js')}}"></script>
+
+         <script src = "{{ url_for('static', filename='barchart.js')}}"></script>
+       <!--  <script src = "{{ url_for('static', filename='textdata.js')}}"></script>-->
+         <script src = "{{ url_for('static', filename='updatebarchart.js')}}"></script>
+       <script src = "{{ url_for('static', filename='linebrush.js')}}"></script>
+       <script src = "{{ url_for('static', filename='sankey.js')}}"></script>
+       <script src = "{{ url_for('static', filename='radial.js')}}"></script>
+       <style src = "{{ url_for('static', filename='style.css')}}"></style>
+
+         <script src = "{{ url_for('static', filename='materialize.min.js')}}"></script>
+         <script src = "{{ url_for('static', filename='sankey_dependecy.js')}}"></script>
+
+         <script src = "{{ url_for('static', filename='imagesloaded.pkgd.min.js')}}"></script>
+         <script src="https://unpkg.com/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"></script>
+
+
+       </body>
+       </html>
